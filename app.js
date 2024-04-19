@@ -4,6 +4,7 @@ const app = express();
 const PORT = 3000;
 const Jimp = require('jimp');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
 //Iniciar el servidor
 app.listen(PORT, ()=>{
@@ -20,30 +21,27 @@ app.get('/', (req, res) => {
 
 //Ruta para procesar imágenes
 app.get("/imagen", async(req, res) =>{
+    
     const { urlImagen } = req.query
+    const uuid = uuidv4();
+    const codigo = uuid.slice(0, 6);
+    const imagen = await Jimp.read(urlImagen);
+    
+    await imagen
+        .resize(350, Jimp.AUTO)
+        .greyscale()
+        .writeAsync(`${codigo}.png`)
+    const imagenData = fs.readFileSync(`${codigo}.png`);   
+    res.send(imagenData)
 
 });
 
-
-
-
-
-
-
-
-
-
-//CON PROMESAS
-// app.get("/crear",async(req,res) => {
-//     const year = new Date().getFullYear()
-//     const mes = new Date().getMonth() +1
-//     const dia = new Date().getDate()
-//     const fecha = `${dia < 10 ? '0' + dia : dia}/${mes < 10 ? '0' + mes : mes}/${year}`
-//     const { archivo, contenido } = req.query
-    
-//     await fs.writeFile(`${archivo}`,`${fecha} \n ${contenido}`)
-//     const mensaje = await fs.readFile(`${archivo}`, "utf-8")
-//     mensaje
-//     ? res.send(`El archivo ${archivo} fue creado con éxito`)
-//     : res.status(500).send("Algo salio mal")
+// app.get("/", async (req, res) =>{
+//     const imagen = await Jimp.read("https://images.pexels.com/photos/20922645/pexels-photo-20922645/free-photo-of-nieve-nevar-paisaje-arena.jpeg")
+//     await imagen
+//     .resize(250, Jimp.AUTO)
+//     .sepia()
+//     .writeAsync('img.png')    
+//     const imagenData = fs.readFileSync('img.png')    
+//     res.send(imagenData)
 // })
