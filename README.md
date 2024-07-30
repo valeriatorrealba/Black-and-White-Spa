@@ -10,7 +10,7 @@ Deberás construir un servidor con Express que permita a los usuarios subir la U
 
 Aquí puedes ver la imagen del diseño que se utilizó como referencia:
 
-![black](screenshot/black.png)
+![black](assets/screenshot/black.png)
 
 ## Requerimientos
 
